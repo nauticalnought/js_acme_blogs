@@ -587,5 +587,11 @@ function initApp() {
     });
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+    const selectMenu = document.getElementById("selectMenu");
+    if (selectMenu && selectMenu.options.length > 0) {
+        selectMenu.remove(0); // Remove the first option
+    }
+});
 
 document.addEventListener('DOMContentLoaded', initApp);
