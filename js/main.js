@@ -1,4 +1,8 @@
 /*
+Title: INF 651 Final Project
+Author: Sones, Daniel
+Date: 22 November, 2024
+
 1. createElemWithText
     a. Receives up to 3 parameters
     b. 1st parameter is the HTML element string name to be created 
@@ -408,10 +412,6 @@ async function createPosts(posts) {
 }
 
 
-
-
-
-
 /*
 16. displayPosts
     a. Dependencies: createPosts, createElemWithText
@@ -586,3 +586,6 @@ function initApp() {
         console.error("Error initializing app:", error);
     });
 }
+
+
+document.addEventListener('DOMContentLoaded', initApp);
