@@ -578,15 +578,10 @@ async function initPage() {
     e. The event listener should call selectMenuChangeEventHandler 
        when the change event fires for the #selectMenu
 */
-async function initApp() {
-    try {
-        const [users, selectMenu] = await initPage();
-        if (selectMenu) {
-            selectMenu.addEventListener('change', selectMenuChangeEventHandler);
-        }
-    } catch (error) {
-        console.error("Error initializing the app:", error);
-    }
+function initApp() {
+    initPage();
+    var selectMenu = document.getElementById("selectMenu");
+    selectMenu.addEventListener('change', selectMenuChangeEventHandler);  
 }
 
 
