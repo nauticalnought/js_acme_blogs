@@ -1,7 +1,7 @@
 /*
 Title: INF 651 Final Project
 Author: Sones, Daniel
-Date: 22 November, 2024
+Date: 28 November, 2024
 
 1. createElemWithText
     a. Receives up to 3 parameters
@@ -94,6 +94,9 @@ function toggleCommentButton(postId) {
     button.textContent = button.textContent === 'Show Comments' 
         ? 'Hide Comments' 
         : 'Show Comments';
+    
+    console.log(`Button text toggled for postId: ${postId}`);  // Log the button text change
+
     return button;
 }
 
@@ -323,8 +326,14 @@ async function getPostComments(postId) {
         const url = `https://jsonplaceholder.typicode.com/comments?postId=${postId}`;
         const response = await fetch(url);
         const comments = await response.json();
+
+        console.log(`Comments for postId ${postId}:`, comments); // Log the fetched comments
+
         return comments;
     } catch (error) {
+
+        console.error(`Error fetching comments for postId ${postId}:`, error);
+
         return undefined;
     }
 }
@@ -350,8 +359,14 @@ async function displayComments(postId) {
     section.dataset.postId = postId;
     section.classList.add('comments', 'hide');
     const comments = await getPostComments(postId);
+
+    console.log("Comments for postId", postId, comments); // Log the comments
+
     const fragment = createComments(comments);
     section.appendChild(fragment);
+
+    console.log("Comment section created:", section); // Log the section element
+
     return section;
 }
 
@@ -434,6 +449,9 @@ async function displayPosts(posts) {
     const element = posts && posts.length > 0
         ? await createPosts(posts)
         : createElemWithText('p', 'No posts available.');
+    
+    console.log("Element to be appended:", element);  // Log the element being appended
+
     mainElement.appendChild(element);
     return element;
 }
@@ -580,7 +598,7 @@ async function initPage() {
 */
 function initApp() {
     initPage();
-    var selectMenu = document.getElementById("selectMenu");
+    const selectMenu = document.getElementById("selectMenu");
     selectMenu.addEventListener('change', selectMenuChangeEventHandler);  
 }
 
