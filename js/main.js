@@ -1,7 +1,7 @@
 /*
 Title: INF 651 Final Project
 Author: Sones, Daniel
-Date: 28 November, 2024
+Date: 1 December, 2024
 
 1. createElemWithText
     a. Receives up to 3 parameters
@@ -41,12 +41,13 @@ function createSelectOptions(users) {
         return undefined;
     }
     const optionsArray = [];
-    users.forEach(user => {
+    for (let i = 0; i < users.length; i++) {
+        const user = users[i];
         const option = document.createElement('option');
         option.value = user.id;
         option.textContent = user.name;
         optionsArray.push(option);
-    });
+    }
     return optionsArray;
 }
 
@@ -62,8 +63,9 @@ function createSelectOptions(users) {
     e. Return the section element
 */
 function toggleCommentSection(postId) {
-    if (!postId)
+    if (!postId) {
         return undefined;
+    }
     const section = document.querySelector(`section[data-post-id="${postId}"]`);
     if (!section) {
         console.log(`No section found with postId: ${postId}`);
@@ -84,8 +86,9 @@ function toggleCommentSection(postId) {
     e. Return the button element
 */
 function toggleCommentButton(postId) {
-    if (!postId)
+    if (!postId) {
         return undefined;
+    }
     const button = document.querySelector(`button[data-post-id="${postId}"]`);
     if (!button) {
         console.log(`No button found with postId: ${postId}`);
@@ -94,9 +97,7 @@ function toggleCommentButton(postId) {
     button.textContent = button.textContent === 'Show Comments' 
         ? 'Hide Comments' 
         : 'Show Comments';
-    
-    console.log(`Button text toggled for postId: ${postId}`);  // Log the button text change
-
+    console.log(`Button text toggled for postId: ${postId}`);
     return button;
 }
 
@@ -141,14 +142,15 @@ function addButtonListeners() {
     if (buttons.length === 0) {
         return buttons; 
     }
-    buttons.forEach(button => {
+    for (let i = 0; i < buttons.length; i++) {
+        const button = buttons[i];
         const postId = button.dataset.postId;
         if (postId) {
             button.addEventListener('click', function(event) {
                 toggleComments(event, postId);
             });
         }
-    });
+    }
     return buttons;
 }
 
@@ -165,7 +167,8 @@ function addButtonListeners() {
 function removeButtonListeners() {
     const buttons = document.querySelectorAll('main button');
     if (buttons.length > 0) {
-        buttons.forEach(button => {
+        for (let i = 0; i < buttons.length; i++) {
+            const button = buttons[i];
             const postId = button.dataset.postId;
             if (postId) {
                 const toggleFunc = function(event) {
@@ -173,7 +176,7 @@ function removeButtonListeners() {
                 };
                 button.removeEventListener('click', toggleFunc);
             }
-        });
+        }
         return buttons;
     }
     return [];
@@ -196,10 +199,12 @@ function removeButtonListeners() {
     k. Return the fragment element
 */
 function createComments(comments) {
-    if (!comments)
+    if (!comments) {
         return undefined;
+    }
     const fragment = document.createDocumentFragment();
-    comments.forEach(comment => {
+    for (let i = 0; i < comments.length; i++) {
+        const comment = comments[i];
         const article = document.createElement('article');
         const h3 = createElemWithText('h3', comment.name);
         const pBody = createElemWithText('p', comment.body);
@@ -208,7 +213,7 @@ function createComments(comments) {
         article.appendChild(pBody);
         article.appendChild(pEmail);
         fragment.appendChild(article);
-    });
+    }
     return fragment;
 }
 
@@ -224,8 +229,9 @@ function createComments(comments) {
     f. Return the selectMenu element
 */
 function populateSelectMenu(users) {
-    if (!users)
+    if (!users) {
         return undefined;
+    }
     const selectMenu = document.getElementById('selectMenu');
     if (!selectMenu) {
         return undefined;
@@ -234,9 +240,9 @@ function populateSelectMenu(users) {
     if (!options) {
         return selectMenu;
     }
-    options.forEach(option => {
-        selectMenu.appendChild(option);
-    });
+    for (let i = 0; i < options.length; i++) {
+        selectMenu.appendChild(options[i]);
+    }
     return selectMenu;
 }
 
@@ -272,8 +278,9 @@ async function getUsers() {
     g. Return the JSON data
 */
 async function getUserPosts(userId) {
-    if (!userId)
+    if (!userId) {
         return undefined;
+    }
     try {
         const url = `https://jsonplaceholder.typicode.com/posts?userId=${userId}`;
         const response = await fetch(url);
@@ -296,8 +303,9 @@ async function getUserPosts(userId) {
     g. Return the JSON data
 */
 async function getUser(userId) {
-    if (!userId)
+    if (!userId) {
         return undefined;
+    }
     try {
         const url = `https://jsonplaceholder.typicode.com/users/${userId}`;
         const response = await fetch(url);
@@ -320,20 +328,17 @@ async function getUser(userId) {
     g. Return the JSON data
 */
 async function getPostComments(postId) {
-    if (!postId)
+    if (!postId) {
         return undefined;
+    }
     try {
         const url = `https://jsonplaceholder.typicode.com/comments?postId=${postId}`;
         const response = await fetch(url);
         const comments = await response.json();
-
-        console.log(`Comments for postId ${postId}:`, comments); // Log the fetched comments
-
+        console.log(`Comments for postId ${postId}:`, comments);
         return comments;
     } catch (error) {
-
         console.error(`Error fetching comments for postId ${postId}:`, error);
-
         return undefined;
     }
 }
@@ -353,20 +358,17 @@ async function getPostComments(postId) {
     j. Return the section element
 */
 async function displayComments(postId) {
-    if(!postId)
+    if(!postId) {
         return undefined;
+    }
     const section = document.createElement('section');
     section.dataset.postId = postId;
     section.classList.add('comments', 'hide');
     const comments = await getPostComments(postId);
-
-    console.log("Comments for postId", postId, comments); // Log the comments
-
+    console.log("Comments for postId", postId, comments);
     const fragment = createComments(comments);
     section.appendChild(fragment);
-
-    console.log("Comment section created:", section); // Log the section element
-
+    console.log("Comment section created:", section);
     return section;
 }
 
@@ -449,9 +451,7 @@ async function displayPosts(posts) {
     const element = posts && posts.length > 0
         ? await createPosts(posts)
         : createElemWithText('p', 'No posts available.');
-    
-    console.log("Element to be appended:", element);  // Log the element being appended
-
+    console.log("Element to be appended:", element);
     mainElement.appendChild(element);
     return element;
 }
@@ -460,10 +460,10 @@ async function displayPosts(posts) {
 /*
 17. toggleComments
 a. Dependencies: toggleCommentSection, toggleCommentButton
-b. Receives 2 parameters: (see addButtonListeners function description)
+b. Receives 2 parameters:
     i. The event from the click event listener is the 1st param
     ii. Receives a postId as the 2nd parameter
-c. Sets event.target.listener = true (I need this for testing to be accurate)
+c. Sets event.target.listener = true
 d. Passes the postId parameter to toggleCommentSection()
 e. toggleCommentSection result is a section element
 f. Passes the postId parameter to toggleCommentButton()
@@ -473,7 +473,7 @@ h. Return an array containing the section element returned from
     toggleCommentButton: [section, button]
 */
 function toggleComments(event, postId) {
-    if (!event || !postId){
+    if (!event || !postId) {
         return undefined;
     }
     event.target.listener = true;
@@ -521,9 +521,9 @@ async function refreshPosts(posts) {
 19. selectMenuChangeEventHandler
     a. Dependencies: getUserPosts, refreshPosts
     b. Should be an async function
-    c. Automatically receives the event as a parameter (see cheatsheet)
+    c. Automatically receives the event as a parameter
     d. Disables the select menu when called into action (disabled property)
-    e. Defines userId = event.target.value || 1; (see cheatsheet)
+    e. Defines userId = event.target.value || 1;
     f. Passes the userId parameter to await getUserPosts
     g. Result is the posts JSON data
     h. Passes the posts JSON data to await refreshPosts
