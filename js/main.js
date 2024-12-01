@@ -536,7 +536,7 @@ async function selectMenuChangeEventHandler(event) {
     if (!event) {
         return undefined;
     }
-    const selectMenu = event.target;
+    const selectMenu = event?.target;
     if (!selectMenu || selectMenu.tagName !== 'SELECT') {
         return [1, [], []];
     }
