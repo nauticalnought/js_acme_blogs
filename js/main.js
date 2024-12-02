@@ -1,7 +1,7 @@
 /*
 Title: INF 651 Final Project
 Author: Sones, Daniel
-Date: 1 December, 2024
+Date: 2 December, 2024
 
 1. createElemWithText
     a. Receives up to 3 parameters
@@ -38,6 +38,7 @@ function createElemWithText(elementType = "p", textContent = "", className) {
 */
 function createSelectOptions(users) {
     if (!users) {
+        console.log(`No section found with user: ${users}`);
         return undefined;
     }
     const optionsArray = [];
@@ -64,6 +65,7 @@ function createSelectOptions(users) {
 */
 function toggleCommentSection(postId) {
     if (!postId) {
+        console.log(`No postId: ${postId} found.`);
         return undefined;
     }
     const section = document.querySelector(`section[data-post-id="${postId}"]`);
@@ -87,6 +89,7 @@ function toggleCommentSection(postId) {
 */
 function toggleCommentButton(postId) {
     if (!postId) {
+        console.log(`No postId: ${postId} found.`);
         return undefined;
     }
     const button = document.querySelector(`button[data-post-id="${postId}"]`);
@@ -113,6 +116,7 @@ function toggleCommentButton(postId) {
 */
 function deleteChildElements(parentElement) {
     if (!parentElement || !(parentElement instanceof HTMLElement)) {
+        console.log(`No parentElement: ${parentElement} found.`);
         return undefined;
     }
     let child = parentElement.lastElementChild;
@@ -200,6 +204,7 @@ function removeButtonListeners() {
 */
 function createComments(comments) {
     if (!comments) {
+        console.log(`No comments: ${comments} found.`);
         return undefined;
     }
     const fragment = document.createDocumentFragment();
@@ -524,32 +529,37 @@ async function refreshPosts(posts) {
        from refreshPosts: [userId, posts, refreshPostsArray]
 */
 async function selectMenuChangeEventHandler(event) {
-    if (!event) {
+    if (!event || event.type !== 'change') {
         return undefined;
     }
     const selectMenu = event?.target;
-    if (!selectMenu || selectMenu.tagName !== 'SELECT') {
-        return [1, [], []];
+    let userId = 1;
+
+    if (selectMenu && selectMenu.value && selectMenu.value !== "Employees") {
+        userId = selectMenu.value;
     }
-    selectMenu.disabled = true;
-    const userId = selectMenu.value || 1;
-    console.log("UserId from select:", userId);
+    if (selectMenu) {
+        selectMenu.disabled = true;
+    }
+    let posts = [];
     try {
-        const posts = await getUserPosts(userId);
+        posts = await getUserPosts(userId);
         if (!Array.isArray(posts)) {
             throw new Error('posts is not a valid array');
         }
-        console.log("Posts:", posts);
-        const refreshPostsArray = await refreshPosts(posts);
+        let refreshPostsArray = await refreshPosts(posts);
         if (!Array.isArray(refreshPostsArray)) {
             throw new Error('refreshPostsArray is not a valid array');
         }
-        console.log("RefreshPostsArray:", refreshPostsArray);
-        selectMenu.disabled = false;
+        if (selectMenu) {
+            selectMenu.disabled = false;
+        }
         return [userId, posts, refreshPostsArray];
     } catch (error) {
         console.error("Error handling select menu change:", error);
-        selectMenu.disabled = false;
+        if (selectMenu) {
+            selectMenu.disabled = false;
+        }
         return [userId, [], []];
     }
 }
