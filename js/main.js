@@ -411,17 +411,8 @@ async function createPosts(posts) {
         const button = document.createElement('button');
         button.textContent = 'Show Comments';
         button.dataset.postId = post.id;
-        article.appendChild(h2);
-        article.appendChild(pBody);
-        article.appendChild(pPostId);
-        article.appendChild(pAuthor);
-        article.appendChild(pCatchPhrase);
-        article.appendChild(button);
-        const section = document.createElement('section');
-        section.dataset.postId = post.id;
-        section.classList.add('comments', 'hide');
-        const commentsSection = await displayComments(post.id);
-        section.appendChild(commentsSection);
+        article.append(h2, pBody, pPostId, pAuthor, pCatchPhrase, button);
+        const section = await displayComments(post.id);
         article.appendChild(section);
         fragment.appendChild(article);
     }
